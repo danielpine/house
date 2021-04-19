@@ -21,6 +21,7 @@ new Vue({
   store,
   render: (h) => h(App)
 }).$mount('#app')
+axios.defaults.withCredentials = true
 axios.interceptors.request.use(function(config) {
   let token = getUser().token
   if (token) {

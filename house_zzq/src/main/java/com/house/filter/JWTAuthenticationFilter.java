@@ -41,8 +41,8 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 		} else if (isAuthness(req.getServletPath())) {
 			filterChain.doFilter(servletRequest, servletResponse);
 		} else {
-			Authentication authentication = TokenAuthenticationService
-			        .getAuthentication(req);
+//			Authentication authentication = TokenAuthenticationService
+//			        .getAuthentication(req);
 //			SecurityContextHolder.getContext().setAuthentication(authentication);
 			filterChain.doFilter(servletRequest, servletResponse);
 		}
