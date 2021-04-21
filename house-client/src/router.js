@@ -34,7 +34,7 @@ const router = new Router({
       path: '/user',
       name: 'user',
       component: User,
-      redirect:'/houses',
+      redirect: '/houses',
       children: [
         {
           path: '/detail/:id',
@@ -46,7 +46,7 @@ const router = new Router({
           path: '/houses',
           name: 'houses',
           component: Houses
-        },
+        }
       ]
     },
     {
@@ -142,7 +142,8 @@ router.beforeEach((to, from, next) => {
     to.path == '/userlogin' ||
     to.path == '/user' ||
     to.path == '/houses' ||
-    to.path == '/register'
+    to.path == '/register' ||
+    to.path.indexOf('/detail/') != -1
   ) {
     next()
   } else {

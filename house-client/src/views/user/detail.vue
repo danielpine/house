@@ -149,14 +149,15 @@
                   </el-date-picker>
                 </div>
                 <br />
-                <button
-                  type="button"
+                <el-button
+                  :disabled="house.status == '已出租'"
+                  type="primary"
                   id="btn-addOrder"
                   class="btn btn-success btn-block"
                   @click="orderHouse"
                 >
                   预定
-                </button>
+                </el-button>
               </div>
             </div>
           </div>
@@ -172,6 +173,7 @@ import userApi from "@/api/user";
 import { setUser } from "@/utils/auth";
 import scheduleApi from "@/api/schedule.js";
 import request from "@/utils/request";
+import { getUser } from "@/utils/auth";
 export default {
   name: "login",
   props: ["id"],
@@ -203,26 +205,6 @@ export default {
       },
       house: {},
       value: "",
-      loginUser: {
-        account: "admin",
-        password: "88888888",
-      },
-      rules: {
-        account: [
-          {
-            required: true,
-            message: "账号不能为空",
-            trigger: "blur",
-          },
-        ],
-        password: [
-          {
-            required: true,
-            message: "密码不能为空",
-            trigger: "blur",
-          },
-        ],
-      },
     };
   },
   created() {
@@ -230,20 +212,46 @@ export default {
   },
   methods: {
     orderHouse() {
+      var user = getUser();
+      console.log(user);
       let that = this;
-      request({
-        method: "post",
-        url: "/order/apply",
-        data: {
-          houseid: that.id,
-          startdate: new Date(),
-          enddate: new Date(),
-        },
-      })
-        .then(function (res) {
-          console.log(res.data);
+      if (user.token) {
+        request({
+          method: "post",
+          url: "/order/apply",
+          data: {
+            houseid: that.id,
+            startdate: new Date(),
+            enddate: new Date(),
+          },
         })
-        .catch(function (err) {});
+          .then(function (res) {
+            console.log(res.data);
+            if (res.data.flag) {
+              that.house = res.data.data;
+              that.$message({
+                message: res.data.message,
+                type: "success",
+              });
+            } else {
+              that.$message({
+                message: res.data.message,
+                type: "error",
+              });
+            }
+          })
+          .catch(function (err) {
+            that.$message({
+              message: err,
+              type: "error",
+            });
+          });
+      } else {
+        that.$message({
+          message: "请先登录！",
+          type: "warn",
+        });
+      }
     },
     fetchHouse() {
       let that = this;
@@ -273,58 +281,6 @@ export default {
         (typeof value === "object" && Object.keys(value).length === 0) ||
         (typeof value === "string" && value.trim().length === 0)
       );
-    },
-    doLogin(formName) {
-      let pojo = {
-        account: this.loginUser.account,
-        password: this.loginUser.password,
-      };
-      userApi.login(pojo).then((res) => {
-        //登录成功之后的处理
-        if (res.data.flag) {
-          let systemRole = res.data.systemRole;
-          let id = res.data.userInfo.id;
-          let name = res.data.userInfo.name;
-          let token = res.data.token;
-
-          //将用户信息存入cookie中
-          setUser(systemRole, name, id, token);
-
-          const decode = jwt_decode(token);
-
-          // 存储数据
-          this.$store.dispatch("setIsAutnenticated", !this.isEmpty(decode));
-          this.$store.dispatch("setUser", decode);
-
-          this.$message({
-            message: "登录成功",
-            type: "success",
-          });
-          this.$router.push("/user");
-
-          scheduleApi.getScheduleInSevenDays().then((res) => {
-            if (res.data.flag) {
-              if (res.data.data.length != 0) {
-                for (var i = 0; i < res.data.data.length; i++) {
-                  this.notify(res.data.data[i].content);
-                }
-              }
-            } else {
-              this.$message({
-                message: "获取公告失败",
-                type: "warning",
-              });
-            }
-          });
-        } else {
-          this.$message({
-            message: "账号或密码错误",
-            type: "error",
-          });
-          this.loginUser.account = "";
-          this.loginUser.password = "";
-        }
-      });
     },
   },
 };

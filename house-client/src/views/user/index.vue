@@ -2,7 +2,6 @@
   <div>
     <!-- Navbar -->
     <Navbar />
-
     <!-- Main Slider With Form -->
     <section class="site-slider">
       <div id="siteslider" class="carousel slide" data-ride="carousel">
@@ -76,7 +75,7 @@
                   class="form-control select2 no-radius"
                   v-model="info.city"
                 >
-                  <option value="">城市</option>
+                  <option value="全部">全部</option>
                   <option value="北京">北京</option>
                   <option value="上海">上海</option>
                   <option value="广州">广州</option>
@@ -154,16 +153,20 @@
     </section>
     <router-view :data="data"></router-view>
     <section class="pt-4 pb-4">
-    <div class="container">
+      <div class="container">
         <div class="row align-items-center text-center text-md-left">
-            <div class="col-md-12" style="margin: auto;text-align: center;">
-                <p class="mt-0 mb-0">好租房公司 © Copyright 2020 GoodHouse. All Rights Reserved</p>
-                <p class="mt-0 mb-0">公安备案888888  工信部备案666666</p>
-                <p class="mt-0 mb-0">违法和不良信息举报电话 +86 2323115 电子邮箱 goodhouse@gmail.com</p>
-            </div>
+          <div class="col-md-12" style="margin: auto; text-align: center">
+            <p class="mt-0 mb-0">
+              好租房公司 © Copyright 2020 GoodHouse. All Rights Reserved
+            </p>
+            <p class="mt-0 mb-0">公安备案888888 工信部备案666666</p>
+            <p class="mt-0 mb-0">
+              违法和不良信息举报电话 +86 2323115 电子邮箱 goodhouse@gmail.com
+            </p>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
   </div>
 </template>
 
