@@ -69,7 +69,6 @@
                     </div>
                 </el-col>
             </el-row>
-
         </div>
         <PaidAddDialog :dialog1="dialog1" @update="getProfile"></PaidAddDialog>
         <PaidEditDialog :dialog2="dialog2" @update="getProfile" :formData="Data"></PaidEditDialog>

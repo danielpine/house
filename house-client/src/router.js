@@ -6,6 +6,7 @@ import UserLogin from './views/user/login.vue'
 import Register from './views/user/register.vue'
 import Detail from './views/user/detail.vue'
 import Houses from './views/user/houses.vue'
+import Order from './views/user/order.vue'
 import NotFound from './views/404.vue'
 import Login from './views/Login.vue'
 import { getUser } from './utils/auth'
@@ -129,6 +130,11 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/order',
+      name: 'order',
+      component: Order
     }
   ]
 })

@@ -1,6 +1,7 @@
 package com.house;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,12 @@ public class OrderRepositoryTests {
 
 	@Autowired
 	private OrderRepository orderRepository;
+
+	@Test
+	public void testListOrderByUserId() {
+		List<Order> list = orderRepository.listUserOrder(1);
+		System.out.println(list);
+	}
 
 	@Test
 	public void testRepository() {

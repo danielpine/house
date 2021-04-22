@@ -1,7 +1,10 @@
 package com.house.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +15,9 @@ public interface OrderRepository {
 	@SelectKey(keyProperty = "orderid", resultType = String.class, before = true, statement = "select replace(uuid(), '-', '')")
 	@Options(keyProperty = "orderid", useGeneratedKeys = true)
 	@Insert("INSERT INTO orders (orderid,houseid,userid,status,createdate,startdate,enddate) "
-			+ "VALUES (#{orderid}, #{houseid}, #{userid}, #{status}, #{createdate}, #{startdate}, #{enddate})")
+	        + "VALUES (#{orderid}, #{houseid}, #{userid}, #{status}, #{createdate}, #{startdate}, #{enddate})")
 	int insert(Order order);
+
+	@Select("SELECT * FROM orders WHERE userid=#{id}")
+	List<Order> listUserOrder(Integer id);
 }

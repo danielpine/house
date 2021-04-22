@@ -75,7 +75,7 @@
                   class="form-control select2 no-radius"
                   v-model="info.city"
                 >
-                  <option value="全部">全部</option>
+                  <option value="">全部</option>
                   <option value="北京">北京</option>
                   <option value="上海">上海</option>
                   <option value="广州">广州</option>

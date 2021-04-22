@@ -23,12 +23,12 @@
           <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
               <li class="nav-item">
-                <a class="nav-link" href="/">
+                <a class="nav-link" href="/user">
                   <i class="fa fa-home"></i> 首页
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/admin/post/new">
+                <a class="nav-link" href="/order">
                   <i class="fa fa-pencil"></i> 订单管理
                 </a>
               </li>
