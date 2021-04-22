@@ -26,31 +26,31 @@ import com.house.service.HouseListService;
 @RequestMapping(value = "/order")
 public class OrderController {
 
-	@Autowired
-	private OrderRepository orderRepository;
-	@Autowired
-	private HouseListService houseListService;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private HouseListService houseListService;
 
-	@RequestMapping(value = "/apply", method = RequestMethod.POST)
-	public Result apply(@RequestBody Order order, HttpServletRequest request) {
-		User user = (User) request.getSession().getAttribute("user");
-		Assert.notNull(user, "登录已失效，请注销然后重新登录！");
-		HouseList house = houseListService.findHouseById(order.getHouseid());
-		Assert.isTrue(StringUtils.equals("未出租", house.getStatus()), "晚了一步，房屋已被预订！");
-		Assert.notNull(house, "房屋不存在");
-		house.setStatus("已出租");
-		house.setUserlist_Id(user.getId());
-		houseListService.updateHouse(house);
-		house.setUserlist_Name(user.getUsername());
-		order.setUserid(user.getId());
-		order.setStatus("待审核");
-		order.setCreatedate(new Date());
-		int code = orderRepository.insert(order);
-		if (code == 1) {
-			return new Result(true, StatusCode.SUCCESS, "预定成功，等待审核。", house);
-		} else {
-			return new Result(true, StatusCode.ERROR, "预定失败，请稍后再试。");
-		}
+    @RequestMapping(value = "/apply", method = RequestMethod.POST)
+    public Result apply(@RequestBody Order order, HttpServletRequest request) {
+	User user = (User) request.getSession().getAttribute("user");
+	Assert.notNull(user, "登录已失效，请注销然后重新登录！");
+	HouseList house = houseListService.findHouseById(order.getHouseid());
+	Assert.isTrue(StringUtils.equals("未出租", house.getStatus()), "晚了一步，房屋已被预订！");
+	Assert.notNull(house, "房屋不存在");
+	house.setStatus("已出租");
+	house.setUserlist_Id(user.getId());
+	house.setUserlist_Name(user.getUsername());
+	houseListService.updateHouse(house);
+	order.setUserid(user.getId());
+	order.setStatus("待审核");
+	order.setCreatedate(new Date());
+	int code = orderRepository.insert(order);
+	if (code == 1) {
+	    return new Result(true, StatusCode.SUCCESS, "预定成功，等待审核。", house);
+	} else {
+	    return new Result(true, StatusCode.ERROR, "预定失败，请稍后再试。");
 	}
+    }
 
 }

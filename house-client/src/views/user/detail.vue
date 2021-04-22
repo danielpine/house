@@ -14,7 +14,13 @@
             </div>
             <div class="col-lg-4 col-md-4 text-right">
               <h6 class="mt-2">
-                <span>{{ house.status }}</span>
+                <span
+                  class="badge"
+                  :class="
+                    house.status == '未出租' ? 'badge-success' : 'badge-dark'
+                  "
+                  >{{ house.status }}</span
+                >
               </h6>
               <h2 class="text-success">
                 ¥ {{ house.price }} <small>/月</small>
@@ -134,19 +140,31 @@
               <div class="card-body">
                 <div class="block">
                   <h5 class="card-title mb-4">立即租房</h5>
-                  <el-date-picker
-                    v-model="value"
-                    type="daterange"
-                    align="right"
-                    unlink-panels
-                    size="small"
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
-                    value-format="yyyyMMdd"
-                    :picker-options="pickerOptions"
+                  <el-form
+                    :inline="true"
+                    :rules="rules"
+                    :model="house"
+                    ref="house"
+                    class="demo-form-inline"
+                    size="mini"
                   >
-                  </el-date-picker>
+                    <el-form-item prop="startend" size="mini">
+                      <el-date-picker
+                        style="width:310px"
+                        v-model="house.startend"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        size="mini"
+                        range-separator="-"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        value-format="yyyyMMdd"
+                        :picker-options="pickerOptions"
+                      >
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-form>
                 </div>
                 <br />
                 <el-button
@@ -154,7 +172,7 @@
                   type="primary"
                   id="btn-addOrder"
                   class="btn btn-success btn-block"
-                  @click="orderHouse"
+                  @click="submit"
                 >
                   预定
                 </el-button>
@@ -168,122 +186,160 @@
 </template>
 
 <script>
-import jwt_decode from "jwt-decode";
-import userApi from "@/api/user";
-import { setUser } from "@/utils/auth";
-import scheduleApi from "@/api/schedule.js";
-import request from "@/utils/request";
-import { getUser } from "@/utils/auth";
+import { getUser } from '@/utils/auth'
+import request from '@/utils/request'
+
+function genDate(picker, n) {
+  const end = new Date(new Date().getTime() + 3600 * 1000 * 24)
+  const start = new Date(new Date().getTime() + 3600 * 1000 * 24)
+  end.setMonth(start.getMonth() + n)
+  picker.$emit('pick', [start, end])
+}
+
 export default {
-  name: "login",
-  props: ["id"],
+  name: 'login',
+  props: ['id'],
   components: {},
   data() {
     return {
+      rules: {
+        startend: [
+          { required: true, message: '请选择租房起始日期', trigger: 'blur' }
+        ]
+      },
       notifyPromise: Promise.resolve(),
       pickerOptions: {
+        disabledDate(time) {
+          return time <= new Date()
+        },
         shortcuts: [
           {
-            text: "一个月",
+            text: '一个月',
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              end.setTime(start.getTime() + 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
-            },
+              genDate(picker, 1)
+            }
           },
           {
-            text: "三个月",
+            text: '三个月',
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              end.setTime(start.getTime() + 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
-            },
+              genDate(picker, 3)
+            }
           },
-        ],
+          {
+            text: '六个月',
+            onClick(picker) {
+              genDate(picker, 6)
+            }
+          },
+          {
+            text: '一  年',
+            onClick(picker) {
+              genDate(picker, 12)
+            }
+          },
+          {
+            text: '两  年',
+            onClick(picker) {
+              genDate(picker, 24)
+            }
+          },
+          {
+            text: '三  年',
+            onClick(picker) {
+              genDate(picker, 36)
+            }
+          }
+        ]
       },
-      house: {},
-      value: "",
-    };
+      house: {
+        value: ''
+      }
+    }
   },
   created() {
-    this.fetchHouse();
+    this.fetchHouse()
   },
   methods: {
+    submit() {
+      this.$refs['house'].validate((valid) => {
+        if (valid) {
+          this.orderHouse()
+        }
+      })
+    },
     orderHouse() {
-      var user = getUser();
-      console.log(user);
-      let that = this;
+      var user = getUser()
+      console.log(user)
+      let that = this
       if (user.token) {
         request({
-          method: "post",
-          url: "/order/apply",
+          method: 'post',
+          url: '/order/apply',
           data: {
             houseid: that.id,
             startdate: new Date(),
-            enddate: new Date(),
-          },
+            enddate: new Date()
+          }
         })
-          .then(function (res) {
-            console.log(res.data);
+          .then(function(res) {
+            console.log(res.data)
             if (res.data.flag) {
-              that.house = res.data.data;
+              that.house = res.data.data
               that.$message({
                 message: res.data.message,
-                type: "success",
-              });
+                type: 'success'
+              })
             } else {
               that.$message({
                 message: res.data.message,
-                type: "error",
-              });
+                type: 'error'
+              })
             }
           })
-          .catch(function (err) {
+          .catch(function(err) {
             that.$message({
               message: err,
-              type: "error",
-            });
-          });
+              type: 'error'
+            })
+          })
       } else {
         that.$message({
-          message: "请先登录！",
-          type: "warn",
-        });
+          message: '请先登录！',
+          type: 'warn'
+        })
       }
     },
     fetchHouse() {
-      let that = this;
+      let that = this
       request({
-        method: "get",
-        url: "/house/" + that.id,
+        method: 'get',
+        url: '/house/' + that.id
       })
-        .then(function (res) {
-          that.house = res.data.data;
+        .then(function(res) {
+          that.house = res.data.data
         })
-        .catch(function (err) {});
+        .catch(function(err) {})
     },
     //通知，解决element-ui，同时调用notify时，通知重叠的问题
     notify(msg) {
       this.notifyPromise = this.notifyPromise.then(this.$nextTick).then(() => {
         this.$notify.info({
-          title: "公告",
+          title: '公告',
           message: msg,
-          offset: 70,
-        });
-      });
+          offset: 70
+        })
+      })
     },
     isEmpty(value) {
       return (
         value === undefined ||
         value === null ||
-        (typeof value === "object" && Object.keys(value).length === 0) ||
-        (typeof value === "string" && value.trim().length === 0)
-      );
-    },
-  },
-};
+        (typeof value === 'object' && Object.keys(value).length === 0) ||
+        (typeof value === 'string' && value.trim().length === 0)
+      )
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -301,4 +357,3 @@ export default {
   overflow: auto;
 }
 </style>
-

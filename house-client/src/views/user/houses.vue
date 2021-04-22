@@ -7,10 +7,20 @@
       </div>
       <div class="container">
         <div class="row">
-          <div v-for="house in data" :key="house.houseId" class="col-lg-4 col-md-4">
+          <div
+            v-for="house in data"
+            :key="house.houseId"
+            class="col-lg-4 col-md-4"
+          >
             <div class="card card-list">
-              <router-link :to="/detail/+house.houseId">
-                <span class="badge badge-success">{{ house.status }}</span>
+              <router-link :to="/detail/ + house.houseId">
+                <span
+                  class="badge"
+                  :class="
+                    house.status == '未出租' ? 'badge-success' : 'badge-dark'
+                  "
+                  >{{ house.status }}</span
+                >
                 <img class="card-img-top" src="/img/3.jpg" />
                 <div class="card-body">
                   <h5 class="card-title">{{ house.address }}</h5>
@@ -46,36 +56,36 @@
 </template>
 
 <script>
-import { getUser } from "@/utils/auth";
-import request from "@/utils/request";
+import { getUser } from '@/utils/auth'
+import request from '@/utils/request'
 export default {
-  name: "user",
+  name: 'user',
   components: {},
   props: ['data'],
   created() {
-    this.getProfile();
+    this.getProfile()
   },
   data() {
     return {
-      user: getUser(),
-    };
+      user: getUser()
+    }
   },
   methods: {
     getProfile() {},
     search() {
-      let that = this;
+      let that = this
       request({
-        method: "post",
-        url: "/house/search",
-        data: that.info,
+        method: 'post',
+        url: '/house/search',
+        data: that.info
       })
-        .then(function (res) {
-          that.data = res.data.data;
+        .then(function(res) {
+          that.data = res.data.data
         })
-        .catch(function (err) {});
-    },
-  },
-};
+        .catch(function(err) {})
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -93,4 +103,3 @@ export default {
   overflow: auto;
 }
 </style>
-
