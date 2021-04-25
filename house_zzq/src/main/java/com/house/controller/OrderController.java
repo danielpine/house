@@ -55,7 +55,7 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
-	public Result list(@RequestBody Order order, HttpServletRequest request) {
+	public Result list(@RequestBody Order order, HttpServletRequest request) { 
 		User user = (User) request.getSession().getAttribute("user");
 		Assert.notNull(user, "登录已失效，请注销然后重新登录！");
 		List<Order> userOrders = orderRepository.listUserOrder(user.getId());
