@@ -21,6 +21,7 @@ import com.house.pojo.Order;
 import com.house.pojo.User;
 import com.house.repository.OrderRepository;
 import com.house.service.HouseListService;
+import com.house.utils.Asserts;
 
 @RestController
 @CrossOrigin
@@ -35,16 +36,17 @@ public class OrderController {
 	@RequestMapping(value = "/apply", method = RequestMethod.POST)
 	public Result apply(@RequestBody Order order, HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
-		Assert.notNull(user, "登录已失效，请注销然后重新登录！");
+		Asserts.checkUser(user);
+		Assert.isTrue(user.getType() == 2, "仅租客可以预定房屋");
 		HouseList house = houseListService.findHouseById(order.getHouseid());
 		Assert.isTrue(StringUtils.equals("未出租", house.getStatus()), "晚了一步，房屋已被预订！");
 		Assert.notNull(house, "房屋不存在");
 		house.setStatus("已出租");
 		house.setUserlist_Id(user.getId());
-		house.setUserlist_Name(user.getUsername());
+		house.setUserlist_Name(user.getUserList().getName());
 		houseListService.updateHouse(house);
 		order.setUserid(user.getId());
-		order.setStatus("待审核");
+		order.setStatus("生效中");
 		order.setCreatedate(new Date());
 		int code = orderRepository.insert(order);
 		if (code == 1) {
@@ -54,11 +56,16 @@ public class OrderController {
 		}
 	}
 
-	@RequestMapping(value = "/list", method = RequestMethod.POST)
-	public Result list(@RequestBody Order order, HttpServletRequest request) { 
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public Result list(HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
-		Assert.notNull(user, "登录已失效，请注销然后重新登录！");
+		Asserts.checkUser(user);
 		List<Order> userOrders = orderRepository.listUserOrder(user.getId());
+		for (Order order : userOrders) {
+			Integer houseid = order.getHouseid();
+			HouseList house = houseListService.findHouseById(houseid);
+			order.setHouse(house);
+		}
 		return new Result(true, StatusCode.SUCCESS, "查询成功。", userOrders);
 	}
 

@@ -2,18 +2,13 @@ import Vue from 'vue'
 import App from './App.vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import { getUser } from './utils/auth'
-
 import router from './router'
 import store from './store'
-
-import axios from 'axios'
+import request from '@/utils/request'
 import moment from 'moment'
 moment.locale('zh-cn')
-
 Vue.prototype.$moment = moment
-
-Vue.prototype.$http = axios
+Vue.prototype.$http = request
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 new Vue({
@@ -21,11 +16,3 @@ new Vue({
   store,
   render: (h) => h(App)
 }).$mount('#app')
-axios.defaults.withCredentials = true
-axios.interceptors.request.use(function(config) {
-  let token = getUser().token
-  if (token) {
-    config.headers['Authorization'] = token
-  }
-  return config
-})

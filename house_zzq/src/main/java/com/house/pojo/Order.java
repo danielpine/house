@@ -5,6 +5,7 @@ import java.util.Date;
 public class Order {
 	private String orderid;
 	private Integer houseid;
+	private HouseList house;
 	private Integer userid;
 	private String status;
 	private Date createdate;
@@ -67,10 +68,19 @@ public class Order {
 		this.enddate = enddate;
 	}
 
+	public HouseList getHouse() {
+		return house;
+	}
+
+	public void setHouse(HouseList house) {
+		this.house = house;
+	}
+
 	@Override
 	public String toString() {
-		return "Order [orderid=" + orderid + ", houseid=" + houseid + ", userid=" + userid + ", status=" + status
-				+ ", createdate=" + createdate + ", startdate=" + startdate + ", enddate=" + enddate + "]";
+		return "Order [orderid=" + orderid + ", houseid=" + houseid + ", house=" + house + ", userid=" + userid
+				+ ", status=" + status + ", createdate=" + createdate + ", startdate=" + startdate + ", enddate="
+				+ enddate + "]";
 	}
 
 }

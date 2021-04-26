@@ -11,34 +11,35 @@ import javax.sql.DataSource;
 import java.util.Map;
 import java.util.Properties;
 
-
 @Configuration
 
 public class DataSourceConfig {
-    @Value("${spring.datasource.druid.url}")
-    String url;
+	@Value("${spring.datasource.druid.url}")
+	String url;
 
-    @Value("${spring.datasource.druid.username}")
-    String username;
+	@Value("${spring.datasource.druid.username}")
+	String username;
 
-    @Value("${spring.datasource.druid.password}")
-    String password;
+	@Value("${spring.datasource.druid.password}")
+	String password;
 
-    @Value("${spring.datasource.druid.driver-class-name}")
-    String driverClassName;
+	@Value("${spring.datasource.druid.driver-class-name}")
+	String driverClassName;
 
-    @Bean
-    public DataSource dataSource(StandardEnvironment env) {
-        Properties properties = new Properties();
-        DruidDataSource druidDataSource = new DruidDataSource();
-        PropertySource<?> appProperties = env.getPropertySources().get("applicationConfig: [classpath:/application.yml]");
-        Map<String, Object> source = (Map<String, Object>) appProperties.getSource();
-        properties.putAll(source);
-        druidDataSource.configFromPropety(properties);
-        druidDataSource.setUrl(url);
-        druidDataSource.setPassword(password);
-        druidDataSource.setUsername(username);
-        druidDataSource.setDriverClassName(driverClassName);
-        return druidDataSource;
-    }
+	@Bean
+	public DataSource dataSource(StandardEnvironment env) {
+		Properties properties = new Properties();
+		DruidDataSource druidDataSource = new DruidDataSource();
+		PropertySource<?> appProperties = env.getPropertySources()
+				.get("applicationConfig: [classpath:/application.yml]");
+		@SuppressWarnings("unchecked")
+		Map<String, Object> source = (Map<String, Object>) appProperties.getSource();
+		properties.putAll(source);
+		druidDataSource.configFromPropety(properties);
+		druidDataSource.setUrl(url);
+		druidDataSource.setPassword(password);
+		druidDataSource.setUsername(username);
+		druidDataSource.setDriverClassName(driverClassName);
+		return druidDataSource;
+	}
 }

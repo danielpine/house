@@ -53,7 +53,7 @@
             </h1>
           </div>
           <div class="row no-gutters">
-            <div class="col-md-2">
+            <!-- <div class="col-md-2">
               <div class="input-group">
                 <div class="input-group-addon">
                   <i class="mdi mdi-map-marker-multiple"></i>
@@ -65,8 +65,8 @@
                   type="text"
                 />
               </div>
-            </div>
-            <div class="col-md-2">
+            </div> -->
+            <div class="col-md-3">
               <div class="input-group">
                 <div class="input-group-addon">
                   <i class="mdi mdi-google-maps"></i>
@@ -89,19 +89,19 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
               <div class="input-group">
                 <div class="input-group-addon">
                   <i class="mdi mdi-security-home"></i>
                 </div>
                 <select class="form-control select2 no-radius" name="cateId">
-                  <option value="">类型</option>
-                  <option value="1">整租</option>
-                  <option value="2">合租</option>
+                  <option value="">房屋状态</option>
+                  <option value="未出租">未出租</option>
+                  <option value="已出租">已出租</option>
                 </select>
               </div>
             </div>
-            <div class="col-md-2">
+            <!-- <div class="col-md-2">
               <div class="input-group">
                 <div class="input-group-addon">
                   <i class="mdi mdi-security-home"></i>
@@ -117,8 +117,8 @@
                   <option value="200-10000">200²以上</option>
                 </select>
               </div>
-            </div>
-            <div class="col-md-2">
+            </div> -->
+            <div class="col-md-3">
               <div class="input-group">
                 <div class="input-group-addon">
                   <i class="mdi mdi-security-home"></i>
@@ -152,7 +152,7 @@
       </div>
     </section>
     <router-view :data="data"></router-view>
-    <section class="pt-4 pb-4">
+    <section class="footer pt-4 pb-4">
       <div class="container">
         <div class="row align-items-center text-center text-md-left">
           <div class="col-md-12" style="margin: auto; text-align: center">

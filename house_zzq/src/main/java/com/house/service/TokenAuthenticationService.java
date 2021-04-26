@@ -3,7 +3,6 @@ package com.house.service;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,12 +26,13 @@ public class TokenAuthenticationService {
 
 	public static void addAuthentication(HttpServletResponse res, String username) throws IOException {
 		String JWT = Jwts.builder().setSubject(username)
-		        .setExpiration(new Date(System.currentTimeMillis() + _expiretime))
-		        .signWith(SignatureAlgorithm.HS512, _secret).compact();
+				.setExpiration(new Date(System.currentTimeMillis() + _expiretime))
+				.signWith(SignatureAlgorithm.HS512, _secret).compact();
 		res.addHeader(_header_string, _token_prefix + " " + JWT);
 		res.setContentType("application/json");
 		res.setStatus(HttpServletResponse.SC_OK);
 		res.getOutputStream().println((new JSONObject() {
+			private static final long serialVersionUID = 1L;
 			{
 				put("status", 0);
 				put("message", "");

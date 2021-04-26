@@ -9,6 +9,8 @@ public class User {
 
 	private Integer type;
 
+	private UserList userList;
+
 	public Integer getId() {
 		return id;
 	}
@@ -39,5 +41,13 @@ public class User {
 
 	public void setType(Integer type) {
 		this.type = type;
+	}
+
+	public UserList getUserList() {
+		return userList;
+	}
+
+	public void setUserList(UserList userList) {
+		this.userList = userList;
 	}
 }

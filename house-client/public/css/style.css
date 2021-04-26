@@ -1070,3 +1070,7 @@ nav.navbar .navbar-nav .nav-link {
     color: #516af0;
     font-weight: bold;
 }
+
+.footer {
+    height: 100px;
+  }

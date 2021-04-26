@@ -33,10 +33,9 @@ public class UserController {
 			map.put("flag", false);
 			return map;
 		}
-		request.getSession().setAttribute("user", user);
-		User u = (User) request.getSession().getAttribute("user");
-		System.out.println(u);
 		UserList userList = userService.findUserInfoByCondition(null, user.getId(), null);
+		user.setUserList(userList);
+		request.getSession().setAttribute("user", user);
 		// 生成令牌
 		JwtUtil jwtUtil = new JwtUtil();
 		String token = null;
@@ -62,13 +61,13 @@ public class UserController {
 	@RequestMapping(value = "/getuserlistbycondition", method = RequestMethod.POST)
 	public Result getuUerListByCondition(@RequestBody UserList userList) {
 		return new Result(true, StatusCode.SUCCESS, "按条件查找用户列表成功",
-		        userService.findUserListByCondition(userList.getName(), userList.getId()));
+				userService.findUserListByCondition(userList.getName(), userList.getId()));
 	}
 
 	@RequestMapping(value = "/getuserinfobycondition", method = RequestMethod.POST)
 	public Result getUserInfoByCondition(@RequestBody UserList userList) {
 		return new Result(true, StatusCode.SUCCESS, "按条件查找用户列表成功",
-		        userService.findUserInfoByCondition(userList.getName(), userList.getUserId(), userList.getId()));
+				userService.findUserInfoByCondition(userList.getName(), userList.getUserId(), userList.getId()));
 
 	}
 

@@ -24,7 +24,7 @@
                 <el-table-column prop="phone" label="电话号码" align="center" width="300">
                 </el-table-column>
                 <el-table-column prop="type" label="系统角色" align="center" width="200">
-                    <template scope="scope">
+                    <template slot-scope="scope">
                         {{ scope.row.type ==2 ?  '普通用户': '管理员' }}             
                     </template>
                 </el-table-column>
@@ -65,7 +65,6 @@
         <UserAddDialog :dialog1="dialog1" @update="getProfile"></UserAddDialog>
         <UserEditDialog :dialog2="dialog2" @update="getProfile" :formData="Data"></UserEditDialog>
     </div>
-        
 </template>
 
 <script>

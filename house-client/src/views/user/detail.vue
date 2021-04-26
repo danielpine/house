@@ -141,32 +141,74 @@
                 <div class="block">
                   <h5 class="card-title mb-4">立即租房</h5>
                   <el-form
+                    label-position="right"
+                    label-width="80px"
                     :inline="true"
                     :rules="rules"
                     :model="house"
                     ref="house"
-                    class="demo-form-inline"
                     size="mini"
                   >
-                    <el-form-item prop="startend" size="mini">
+                    <el-form-item prop="months" size="mini" label="租期">
+                      <el-select
+                        v-model="house.months"
+                        style="width:180px"
+                        placeholder="请选择"
+                        @change="onMonthsChange"
+                      >
+                        <el-option
+                          v-for="item in options"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item size="mini" label="开始日期">
                       <el-date-picker
+                        v-model="startdate"
+                        readonly
+                        style="width:180px"
+                        type="date"
+                        placeholder="开始日期"
+                      >
+                      </el-date-picker>
+                    </el-form-item>
+                    <el-form-item size="mini" label="结束日期">
+                      <el-date-picker
+                        v-model="enddate"
+                        readonly
+                        style="width:180px"
+                        type="date"
+                        placeholder="结束日期"
+                      >
+                      </el-date-picker>
+                    </el-form-item>
+                    <el-form-item size="mini" label="押金">
+                      ¥ {{ house.price }}
+                    </el-form-item>
+                    <el-form-item v-if="house.months" size="mini" label="租金">
+                      ¥ {{ house.price * house.months }}
+                    </el-form-item>
+                    <!-- <el-form-item prop="startend" size="mini">
+                       <el-date-picker
                         style="width:310px"
                         v-model="house.startend"
                         type="daterange"
                         align="right"
+                        readonly
                         unlink-panels
                         size="mini"
                         range-separator="-"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
-                        value-format="yyyyMMdd"
                         :picker-options="pickerOptions"
                       >
-                      </el-date-picker>
-                    </el-form-item>
+                      </el-date-picker>  
+                    </el-form-item> -->
                   </el-form>
                 </div>
-                <br />
                 <el-button
                   :disabled="house.status == '已出租'"
                   type="primary"
@@ -202,15 +244,36 @@ export default {
   components: {},
   data() {
     return {
+      options: [
+        {
+          value: 3,
+          label: '三个月'
+        },
+        {
+          value: 6,
+          label: '六个月'
+        },
+        {
+          value: 12,
+          label: '一年'
+        },
+        {
+          value: 24,
+          label: '两年'
+        },
+        {
+          value: 36,
+          label: '三年'
+        }
+      ],
       rules: {
-        startend: [
-          { required: true, message: '请选择租房起始日期', trigger: 'blur' }
-        ]
+        months: [{ required: true, message: '请选择租期' }]
       },
       notifyPromise: Promise.resolve(),
       pickerOptions: {
         disabledDate(time) {
-          return time <= new Date()
+          // return time <= new Date()
+          return true
         },
         shortcuts: [
           {
@@ -251,9 +314,9 @@ export default {
           }
         ]
       },
-      house: {
-        value: ''
-      }
+      house: {},
+      startdate: new Date(new Date().getTime() + 3600 * 1000 * 24),
+      enddate: null
     }
   },
   created() {
@@ -267,28 +330,35 @@ export default {
         }
       })
     },
+    onMonthsChange() {
+      const end = new Date(new Date().getTime() + 3600 * 1000 * 24)
+      const start = new Date(new Date().getTime() + 3600 * 1000 * 24)
+      end.setMonth(start.getMonth() + this.house.months)
+      this.enddate = end
+    },
     orderHouse() {
       var user = getUser()
       console.log(user)
       let that = this
+      console.log(that.house)
       if (user.token) {
         request({
           method: 'post',
           url: '/order/apply',
           data: {
             houseid: that.id,
-            startdate: new Date(),
-            enddate: new Date()
+            startdate: that.startdate,
+            enddate: that.enddate
           }
         })
           .then(function(res) {
-            console.log(res.data)
             if (res.data.flag) {
               that.house = res.data.data
               that.$message({
                 message: res.data.message,
                 type: 'success'
               })
+              that.$router.push('/order')
             } else {
               that.$message({
                 message: res.data.message,
