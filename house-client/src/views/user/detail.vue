@@ -348,7 +348,8 @@ export default {
           data: {
             houseid: that.id,
             startdate: that.startdate,
-            enddate: that.enddate
+            enddate: that.enddate,
+            months: that.house.months,
           }
         })
           .then(function(res) {

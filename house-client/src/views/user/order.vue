@@ -16,6 +16,7 @@
           :show-overflow-tooltip="true"
         />
         <el-table-column prop="house.address" label="租赁关系" />
+        <el-table-column prop="months" label="租赁期限(月)" width="110" />
         <el-table-column label="租赁时间" width="250">
           <template slot-scope="scope">
             <i class="el-icon-time"></i>
@@ -26,7 +27,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column prop="house.price" label="金额(元)" width="150" />
+        <el-table-column prop="house.price" label="租金(元/月)" width="110" />
         <el-table-column prop="date" label="租金缴纳" width="350">
           <template slot-scope="scope">
             <table style="width:100%">
@@ -35,24 +36,35 @@
                 <td>应缴</td>
                 <td>状态</td>
               </tr>
-              <tr>
-                <td>押金</td>
-                <td>{{ scope.row.house.price }}</td>
-                <td>已缴</td>
-              </tr>
-              <tr>
-                <td>房租</td>
-                <td>{{ scope.row.house.price * 12 }}</td>
-                <td>已缴</td>
+              <tr v-for="p in scope.row.paids" :key="p.id">
+                <td>{{ p.paytype }}</td>
+                <td>{{ p.price }}</td>
+                <td>{{ p.status }}</td>
               </tr>
             </table>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="订单状态" width="150" />
+        <el-table-column prop="status" label="订单状态" width="150">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status == '生效中'" style="color:green">
+              {{ scope.row.status }}
+            </span>
+            <span v-else>
+              {{ scope.row.status }}
+            </span>
+            <a
+              v-if="scope.row.status == '待支付'"
+              type="primary"
+              :href="'/pay?orderid=' + scope.row.orderid"
+              target="_blank"
+              >去支付</a
+            >
+          </template>
+        </el-table-column>
         <el-table-column
           prop="createdate"
           label="创建时间"
-          width="150"
+          width="170"
           :formatter="dateFormat"
         />
         <el-table-column label="操作" prop="operation" width="200">
@@ -61,14 +73,16 @@
               size="small"
               type="danger"
               icon="el-icon-delete"
-              @click="handleEdit(scope.$index, scope.row)"
+              :disabled="'待支付' != scope.row.status"
+              @click="cancel(scope.row.orderid)"
               >取消</el-button
             >
             <el-button
               size="small"
               type="success"
               icon="el-icon-edit"
-              @click="handleEdit(scope.$index, scope.row)"
+              :disabled="'生效中' != scope.row.status"
+              @click="surrender(scope.row.orderid)"
               >退租</el-button
             >
           </template>
@@ -114,7 +128,7 @@ export default {
       if (date == undefined) {
         return ''
       }
-      return this.$moment(date).format('YYYY-MM-DD')
+      return this.$moment(date).format('YYYY-MM-DD HH:mm:ss')
     },
     formatDate: function(date) {
       if (date == undefined) {
@@ -122,17 +136,37 @@ export default {
       }
       return this.$moment(date).format('YYYY-MM-DD')
     },
-    getProfile() {},
     list() {
       let that = this
       request({
         method: 'get',
         url: '/order/list'
+      }).then(function(res) {
+        console.log(res.data)
+        if (res.data.flag) {
+          that.tableData = res.data.data
+        } else {
+          that.$message({
+            message: res.data.message,
+            type: 'error'
+          })
+        }
+      })
+    },
+    surrender(orderid) {
+      let that = this
+      request({
+        method: 'get',
+        url: '/order/surrender?orderid=' + orderid
       })
         .then(function(res) {
           console.log(res.data)
           if (res.data.flag) {
-            that.tableData = res.data.data
+            that.$message({
+              message: res.data.message,
+              type: 'success'
+            })
+            that.list()
           } else {
             that.$message({
               message: res.data.message,

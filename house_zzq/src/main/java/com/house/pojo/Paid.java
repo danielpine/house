@@ -35,8 +35,14 @@ public class Paid {
 	@Column(name = "status")
 	private String status;
 
+	@Column(name = "paytype")
+	private String paytype;
+
 	@Column(name = "houseid")
 	private Integer houseId;
+
+	@Column(name = "orderid")
+	private String orderid;
 
 	public Integer getId() {
 		return id;
@@ -108,6 +114,22 @@ public class Paid {
 
 	public void setHouseId(Integer houseId) {
 		this.houseId = houseId;
+	}
+
+	public String getPaytype() {
+		return paytype;
+	}
+
+	public void setPaytype(String paytype) {
+		this.paytype = paytype;
+	}
+
+	public String getOrderid() {
+		return orderid;
+	}
+
+	public void setOrderid(String orderid) {
+		this.orderid = orderid;
 	}
 
 }

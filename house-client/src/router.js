@@ -7,6 +7,7 @@ import Register from './views/user/register.vue'
 import Detail from './views/user/detail.vue'
 import Houses from './views/user/houses.vue'
 import Order from './views/user/order.vue'
+import Pay from './views/user/pay.vue'
 import NotFound from './views/404.vue'
 import Login from './views/Login.vue'
 import { getUser } from './utils/auth'
@@ -52,7 +53,7 @@ const router = new Router({
     },
     {
       path: '/userlogin',
-      name: 'user',
+      name: 'userlogin',
       component: UserLogin
     },
     {
@@ -135,6 +136,11 @@ const router = new Router({
       path: '/order',
       name: 'order',
       component: Order
+    },
+    {
+      path: '/pay',
+      name: 'pay',
+      component: Pay
     }
   ]
 })

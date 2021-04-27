@@ -9,16 +9,16 @@ import java.util.List;
 @Repository
 public interface PaidDao {
 
-     List<Paid> selectByCondition(@Param("status") String status,
-                                  @Param("name") String name,
-                                  @Param("address") String address,
-                                  @Param("userlist_id") Integer userlist_id);
+	List<Paid> selectByCondition(@Param("status") String status, @Param("name") String name,
+			@Param("address") String address, @Param("userlist_id") Integer userlist_id);
 
-     int deletePaidById(Integer id);
+	List<Paid> listByOrderId(String orderid);
 
-     int insertPaid(Paid paid);
+	int deletePaidById(Integer id);
 
-     int updatePaid(Paid paid);
+	int insertPaid(Paid paid);
 
-     Paid selectPaidById(Integer id);
+	int updatePaid(Paid paid);
+
+	Paid selectPaidById(Integer id);
 }

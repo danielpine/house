@@ -47,13 +47,13 @@ service.interceptors.response.use(
   },
   (error) => {
     endLoading()
-    Message.error(error.response.data)
     const { status } = error.response
-    console.log(status)
     if (status == 401) {
-      Message.error('Token失效,请重新登录！')
+      Message.error('Token失效,请重新登录!')
       removeUser()
       router.push('/userlogin')
+    } else {
+      Message.error(error.response.data)
     }
     return Promise.reject(error)
   }

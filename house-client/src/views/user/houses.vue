@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Navbar -->
     <section class="section-padding" style="padding: 50px">
       <div class="section-title text-center mb-5">
         <h2>房屋信息</h2>

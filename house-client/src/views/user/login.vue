@@ -58,8 +58,8 @@ export default {
     return {
       notifyPromise: Promise.resolve(),
       loginUser: {
-        account: "admin",
-        password: "88888888",
+        account: "zhouixao2",
+        password: "123456",
       },
       rules: {
         account: [

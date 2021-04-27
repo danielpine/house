@@ -93,7 +93,7 @@ export default {
                         message:"登录成功",
                         type:"success"
                     });
-                    this.$router.push("/user")
+                    this.$router.push("/home")
                     scheduleApi.getScheduleInSevenDays().then(res =>{                
                         if(res.data.flag){
                             if(res.data.data.length != 0){

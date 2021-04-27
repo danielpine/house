@@ -1,16 +1,19 @@
 package com.house.pojo;
 
 import java.util.Date;
+import java.util.List;
 
 public class Order {
 	private String orderid;
 	private Integer houseid;
 	private HouseList house;
 	private Integer userid;
+	private Integer months;
 	private String status;
 	private Date createdate;
 	private Date startdate;
 	private Date enddate;
+	private List<Paid> paids;
 
 	public String getOrderid() {
 		return orderid;
@@ -76,11 +79,27 @@ public class Order {
 		this.house = house;
 	}
 
+	public Integer getMonths() {
+		return months;
+	}
+
+	public void setMonths(Integer months) {
+		this.months = months;
+	}
+
+	public List<Paid> getPaids() {
+		return paids;
+	}
+
+	public void setPaids(List<Paid> paids) {
+		this.paids = paids;
+	}
+
 	@Override
 	public String toString() {
 		return "Order [orderid=" + orderid + ", houseid=" + houseid + ", house=" + house + ", userid=" + userid
-				+ ", status=" + status + ", createdate=" + createdate + ", startdate=" + startdate + ", enddate="
-				+ enddate + "]";
+				+ ", months=" + months + ", status=" + status + ", createdate=" + createdate + ", startdate="
+				+ startdate + ", enddate=" + enddate + ", paids=" + paids + "]";
 	}
 
 }

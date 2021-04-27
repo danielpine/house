@@ -66,23 +66,23 @@ img {
     transform-style: preserve-3d;
 }
 
-a {
+.card a {
     transition: color 300ms ease 0s, background-color 300ms ease 0s;
     text-decoration: none !important;
     color: #34495e;
 }
 
-a:hover {
+.card a:hover {
     transition: color 300ms ease 0s, background-color 300ms ease 0s;
     color: #34495e;
 }
 
-a,
-a:hover {
+.card a,
+.card a:hover {
     text-decoration: none;
 }
 
-a:focus {
+.card a:focus {
     outline: medium none;
     outline-offset: 0;
 }
@@ -1073,4 +1073,15 @@ nav.navbar .navbar-nav .nav-link {
 
 .footer {
     height: 100px;
-  }
+}
+
+.qrcode {
+    display: inline-block;
+}
+
+.qrcode img {
+    background-color: #fff;
+    padding: 6px;
+    box-sizing: border-box;
+    display: inline !important;
+}
