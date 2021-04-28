@@ -22,7 +22,7 @@ function endLoading() {
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://localhost:9002', // api的base_url
+  baseURL: '/api', // api的base_url
   timeout: 30000, // 请求超时时间
   headers: { Authorization: 'Bearer ' + getUser().token },
   withCredentials: true
