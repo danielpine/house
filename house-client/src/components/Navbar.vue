@@ -7,7 +7,7 @@
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container" style="margin: auto">
           <a class="navbar-brand text-success logo" href="/">
-            <img class="img-fluid" src="/img/logo.svg" alt="" />
+            <img style="height:80px;" src="/img/logo.png" alt="" />
           </a>
           <button
             class="navbar-toggler navbar-toggler-right"
@@ -35,7 +35,10 @@
             </ul>
             <ul class="list-inline main-nav-right">
               <li v-if="user.name" class="list-inline-item">
-                <el-dropdown @command="setDialogInfo" class="btn btn-link btn-sm">
+                <el-dropdown
+                  @command="setDialogInfo"
+                  class="btn btn-link btn-sm"
+                >
                   <span class="el-dropdown-link"
                     ><i class="fa fa-user"></i> {{ user.name }}
                     <i class="el-icon-caret-bottom el-icon--right"></i>
@@ -59,59 +62,59 @@
 </template>
 
 <script>
-import { removeUser, getUser } from "@/utils/auth";
-import request from "@/utils/request";
+import { removeUser, getUser } from '@/utils/auth'
+import request from '@/utils/request'
 export default {
-  name: "user",
+  name: 'user',
   components: {},
   created() {
-    this.getProfile();
+    this.getProfile()
   },
   data() {
     return {
       user: getUser(),
       info: {
-        city: "上海",
+        city: '上海'
       },
-      data: {},
-    };
+      data: {}
+    }
   },
   methods: {
     setDialogInfo(cmdItem) {
       switch (cmdItem) {
-        case "logout":
-          this.logout();
-          break;
+        case 'logout':
+          this.logout()
+          break
       }
     },
     logout() {
       //清除用户信息
-      removeUser();
+      removeUser()
       //设置vue store
-      this.$store.dispatch("clearCurrentState");
+      this.$store.dispatch('clearCurrentState')
       //跳转
-      window.location.reload();
+      window.location.reload()
     },
     getProfile() {},
     search() {
-      let that = this;
+      let that = this
       request({
-        method: "post",
-        url: "/house/search",
-        data: that.info,
+        method: 'post',
+        url: '/house/search',
+        data: that.info
       })
-        .then(function (res) {
-          that.data = res.data.data;
+        .then(function(res) {
+          that.data = res.data.data
         })
-        .catch(function (err) {
+        .catch(function(err) {
           that.$message({
             message: err,
-            type: "error",
-          });
-        });
-    },
-  },
-};
+            type: 'error'
+          })
+        })
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -129,4 +132,3 @@ export default {
   overflow: auto;
 }
 </style>
-
